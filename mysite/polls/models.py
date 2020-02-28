@@ -18,7 +18,6 @@ class Series(models.Model):
     was_published_recently.short_description = 'Published recently?'
 
 
-
 class Question(models.Model):
     series = models.ForeignKey(Series, on_delete=models.CASCADE, blank=True, null=True, default='')
     question_text = models.CharField(max_length=200, null=True)
