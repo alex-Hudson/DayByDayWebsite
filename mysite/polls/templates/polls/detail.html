@@ -1,11 +1,11 @@
-<h1>{{ question.question_text }}</h1>
+<h1>{{ passage_title.passage_title_text }}</h1>
 
 {% if error_message %}
 <p><strong>{{ error_message }}</strong></p>
 {% endif %}
 
-<form action="{% url 'polls:vote' question.id %}" method="post">
-  {% csrf_token %} {% for choice in question.choice_set.all %}
+<form action="{% url 'polls:vote' passage_title.id %}" method="post">
+  {% csrf_token %} {% for choice in passage_title.choice_set.all %}
   <input
     type="radio"
     name="choice"
@@ -19,7 +19,7 @@
 </form>
 
 <p>
-    {% csrf_token %} {% for choice in question.choice_set.all %}
+    {% csrf_token %} {% for choice in passage_title.choice_set.all %}
         <p>{{ choice.passage_text }}</p>
         <p>{{ choice.day_by_day_question_text }}</p>
     <br/>

@@ -18,13 +18,13 @@ class Series(models.Model):
     was_published_recently.short_description = 'Published recently?'
 
 
-class Question(models.Model):
+class PassageTitle(models.Model):
     series = models.ForeignKey(Series, on_delete=models.CASCADE, blank=True, null=True, default='')
-    question_text = models.CharField(max_length=200, null=True)
+    passage_title_text = models.CharField(max_length=200, null=True)
     pub_date = models.DateTimeField('date published')
 
     def __str__(self):
-        return self.question_text
+        return self.passage_title_text
 
     def was_published_recently(self):
         now = timezone.now()
@@ -35,7 +35,7 @@ class Question(models.Model):
 
 
 class Choice(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    passage_title = models.ForeignKey(PassageTitle, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200, blank=True)
     passage_text = models.CharField(max_length=1000, blank=True)
     day_by_day_question_text = models.CharField(max_length=1000, blank=True)

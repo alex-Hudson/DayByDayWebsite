@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
 
-from .models import Choice, Question, Series
+from .models import Choice, PassageTitle, Series
 
 
 class IndexView(generic.ListView):
@@ -13,7 +13,7 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         """
-        Return the last five published questions (not including those set to be
+        Return the last five published series (not including those set to be
         published in the future).
         """
         return Series.objects.filter(
@@ -22,35 +22,35 @@ class IndexView(generic.ListView):
 
 
 class DetailView(generic.DetailView):
-    model = Question
+    model = PassageTitle
     template_name = 'polls/detail.html'
 
     def get_queryset(self):
         """
-        Excludes any questions that aren't published yet.
+        Excludes any passage_titles that aren't published yet.
         """
-        return Question.objects.filter(pub_date__lte=timezone.now())
+        return PassageTitle.objects.filter(pub_date__lte=timezone.now())
 
 
 class ResultsView(generic.DetailView):
-    model = Question
+    model = PassageTitle
     template_name = 'polls/results.html'
 
 
-def vote(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
+def vote(request, passage_title_id):
+    passage_title = get_object_or_404(PassageTitle, pk=passage_title_id)
     try:
-        selected_choice = question.choice_set.get(pk=request.POST['choice'])
+        selected_passage_text_and_question = passage_title.passage_text_and_questions_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
-        # Redisplay the question voting form.
+        # Redisplay the passage title.
         return render(request, 'polls/detail.html', {
-            'question': question,
+            'passage_title': passage_title,
             'error_message': "You didn't select a choice.",
         })
     else:
-        selected_choice.votes += 1
-        selected_choice.save()
+        selected_passage_text_and_question.votes += 1
+        selected_passage_text_and_question.save()
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
-        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+        return HttpResponseRedirect(reverse('polls:results', args=(passage_title.id,)))
